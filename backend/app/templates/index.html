@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FESTA - 논문 Q&A 시스템</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-center mb-8">FESTA - 논문 Q&A 시스템</h1>
+            
+            <!-- 논문 업로드 섹션 -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-xl font-semibold mb-4">논문 업로드</h2>
+                <form id="uploadForm" class="flex items-center space-x-4">
+                    <input type="file" id="paperFile" accept=".pdf" class="flex-1 p-2 border rounded">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        업로드
+                    </button>
+                </form>
+            </div>
+
+            <!-- 채팅 인터페이스 -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div id="chat-messages" class="h-[500px] overflow-y-auto mb-4 space-y-4">
+                    <!-- 메시지들이 여기에 동적으로 추가됩니다 -->
+                </div>
+                
+                <div class="flex space-x-4">
+                    <input type="text" id="messageInput" 
+                           class="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="질문을 입력하세요...">
+                    <button id="sendButton" 
+                            class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+                        전송
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='/js/chat.js') }}"></script>
+</body>
+</html> 
