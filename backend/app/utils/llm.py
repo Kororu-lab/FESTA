@@ -1,7 +1,8 @@
 import os
-from typing import List, Dict, Any
-import requests
+import json
+import httpx
 from dotenv import load_dotenv
+from typing import List, Dict, Any, Optional
 
 # .env 파일 로드
 load_dotenv()
@@ -11,67 +12,71 @@ class DeepSeekAPI:
         self.api_key = os.getenv("DEEPSEEK_API_KEY")
         if not self.api_key:
             raise ValueError("DEEPSEEK_API_KEY가 설정되지 않았습니다.")
+        print(f"DeepSeek API 초기화 완료 (API Key: {self.api_key[:8]}...)")
         
-        self.base_url = "https://api.deepseek.com/v1"
-        self.headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
-        }
+        self.base_url = "https://api.deepseek.com/v1/chat/completions"
+        self.models = [
+            {"id": "deepseek-chat", "name": "DeepSeek Chat", "description": "기본 대화 모델"},
+            {"id": "deepseek-coder", "name": "DeepSeek Coder", "description": "코딩 특화 모델"}
+        ]
 
-    def generate_response(self, 
-                         prompt: str, 
-                         context: List[Dict[str, Any]] = None,
-                         max_tokens: int = 1000,
-                         temperature: float = 0.7) -> str:
-        """
-        DeepSeek API를 사용하여 응답을 생성합니다.
+    def get_available_models(self) -> List[Dict[str, str]]:
+        return self.models
+
+    async def generate_response(self, user_input: str, chat_history: Optional[List[Dict[str, str]]] = None, context_docs: Optional[List[str]] = None, model_id: str = "deepseek-chat") -> str:
+        print(f"API 요청 시작 - 모델: {model_id}")
+        print(f"사용자 입력: {user_input}")
         
-        Args:
-            prompt: 사용자 질문
-            context: 관련 문서 컨텍스트
-            max_tokens: 최대 토큰 수
-            temperature: 응답의 창의성 정도 (0.0 ~ 1.0)
-            
-        Returns:
-            생성된 응답 텍스트
-        """
-        # 컨텍스트가 있는 경우 프롬프트 구성
-        if context:
-            context_text = "\n\n".join([
-                f"문서: {doc.get('title', '제목 없음')}\n{doc.get('text', '')}"
-                for doc in context
-            ])
-            full_prompt = f"""다음 문서들을 참고하여 질문에 답변해주세요:
-
-{context_text}
-
-질문: {prompt}
-
-답변:"""
-        else:
-            full_prompt = prompt
-
-        # API 요청 데이터 구성
-        data = {
-            "model": "deepseek-chat",
-            "messages": [
-                {"role": "system", "content": "당신은 논문 Q&A 시스템의 AI 어시스턴트입니다. 주어진 문서들을 참고하여 질문에 정확하고 명확하게 답변해주세요."},
-                {"role": "user", "content": full_prompt}
-            ],
-            "max_tokens": max_tokens,
-            "temperature": temperature
-        }
-
+        # 시스템 프롬프트 구성
+        system_prompt = "당신은 논문과 연구에 대해 잘 알고 있는 AI 어시스턴트입니다. "
+        if context_docs:
+            system_prompt += "다음 문서들을 참고하여 답변해주세요:\n\n"
+            for doc in context_docs:
+                system_prompt += f"{doc}\n\n"
+        
+        # 메시지 구성
+        messages = [{"role": "system", "content": system_prompt}]
+        
+        # 채팅 기록 추가
+        if chat_history:
+            for msg in chat_history[-10:]:  # 최근 10개 메시지만 사용
+                messages.append({
+                    "role": msg["role"],
+                    "content": msg["content"]
+                })
+        
+        messages.append({"role": "user", "content": user_input})
+        
+        print(f"전송할 메시지: {json.dumps(messages, ensure_ascii=False)}")
+        
         try:
-            response = requests.post(
-                f"{self.base_url}/chat/completions",
-                headers=self.headers,
-                json=data
-            )
-            response.raise_for_status()
-            
-            result = response.json()
-            return result["choices"][0]["message"]["content"]
-            
-        except requests.exceptions.RequestException as e:
-            raise Exception(f"DeepSeek API 호출 중 오류 발생: {str(e)}") 
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    self.base_url,
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": model_id,
+                        "messages": messages,
+                        "temperature": 0.7,
+                        "max_tokens": 2000
+                    },
+                    timeout=30.0
+                )
+                
+                print(f"API 응답 상태 코드: {response.status_code}")
+                response_data = response.json()
+                print(f"API 응답 데이터: {json.dumps(response_data, ensure_ascii=False)}")
+                
+                if response.status_code == 200 and "choices" in response_data:
+                    return response_data["choices"][0]["message"]["content"]
+                else:
+                    error_message = response_data.get("error", {}).get("message", "알 수 없는 오류가 발생했습니다.")
+                    print(f"API 오류: {error_message}")
+                    return f"죄송합니다. API 호출 중 오류가 발생했습니다: {error_message}"
+                    
+        except Exception as e:
+            print(f"API 호출 중 예외 발생: {str(e)}")
+            return f"죄송합니다. API 호출 중 오류가 발생했습니다: {str(e)}" 

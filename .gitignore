@@ -4,6 +4,23 @@ __pycache__/
 *$py.class
 *.so
 .Python
+venv/
+env/
+ENV/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+.python-version
 build/
 develop-eggs/
 dist/
@@ -21,16 +38,14 @@ wheels/
 *.egg
 
 # Virtual Environment
-venv/
-ENV/
-env/
-.env
+backend/venv/
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
 # Project specific
 backend/app/data/papers/*
@@ -38,4 +53,8 @@ backend/app/data/processed/*
 backend/app/data/db/*
 !backend/app/data/papers/.gitkeep
 !backend/app/data/processed/.gitkeep
-!backend/app/data/db/.gitkeep 
+!backend/app/data/db/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db 

@@ -6,8 +6,12 @@ from fastapi import Request
 import uvicorn
 from pathlib import Path
 import json
-from typing import List
+from typing import List, Dict, Optional
 import os
+import uuid
+from datetime import datetime
+import re
+import secrets
 
 from .utils.document_processor import DocumentProcessor
 from .utils.database import Database
@@ -21,7 +25,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 # 초기화
-BASE_DIR = Path(__file__).parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 document_processor = DocumentProcessor(str(BASE_DIR))
 database = Database(str(BASE_DIR / "data" / "db" / "documents.db"))
 llm = DeepSeekAPI()
@@ -29,17 +33,23 @@ llm = DeepSeekAPI()
 # WebSocket 연결 관리
 class ConnectionManager:
     def __init__(self):
-        self.active_connections: list[WebSocket] = []
+        self.active_connections: Dict[str, WebSocket] = {}
+        self.chat_histories: Dict[str, List[Dict[str, str]]] = {}
+        self.reconnect_tokens: Dict[str, str] = {}
 
-    async def connect(self, websocket: WebSocket):
+    async def connect(self, websocket: WebSocket, client_id: str):
         await websocket.accept()
-        self.active_connections.append(websocket)
+        print(f"클라이언트 연결됨: {client_id}")
+        self.active_connections[client_id] = websocket
 
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+    def disconnect(self, websocket: WebSocket, client_id: str):
+        if client_id in self.active_connections:
+            del self.active_connections[client_id]
+            print(f"클라이언트 연결 종료: {client_id}")
 
-    async def send_message(self, websocket: WebSocket, message: str):
-        await websocket.send_text(message)
+    async def broadcast(self, message: str):
+        for connection in self.active_connections.values():
+            await connection.send_text(message)
 
 manager = ConnectionManager()
 
@@ -47,80 +57,221 @@ manager = ConnectionManager()
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/models")
+async def get_available_models():
+    """사용 가능한 모델 목록을 반환합니다."""
+    return llm.get_available_models()
+
 @app.websocket("/ws/chat")
-async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
+async def websocket_endpoint(websocket: WebSocket, client_id: str, reconnect_token: str = None):
+    await manager.connect(websocket, client_id)
     try:
+        # 재연결 토큰이 있는 경우 채팅 기록 전송
+        if reconnect_token and reconnect_token in manager.chat_histories:
+            await websocket.send_json({
+                "type": "chat_history",
+                "history": manager.chat_histories[reconnect_token]
+            })
+        
+        # 새로운 재연결 토큰 생성 및 전송
+        new_token = secrets.token_urlsafe(32)
+        manager.chat_histories[new_token] = []
+        await websocket.send_json({
+            "type": "reconnect_token",
+            "token": new_token
+        })
+        
         while True:
-            # 사용자 메시지 수신
-            data = await websocket.receive_text()
-            message_data = json.loads(data)
-            
-            # 메시지 타입 확인
-            if message_data.get("type") == "question":
-                question = message_data.get("content", "")
+            try:
+                data = await websocket.receive_json()
+                print(f"받은 메시지: {data}")
                 
-                # 관련 문서 검색
-                relevant_docs = database.search_documents(question, limit=3)
-                
-                try:
-                    # DeepSeek API를 사용하여 응답 생성
-                    response = llm.generate_response(question, relevant_docs)
+                if data["type"] == "message":
+                    content = data["content"]
+                    model = data.get("model", "deepseek-chat")
                     
-                    # 응답 전송
-                    await manager.send_message(websocket, json.dumps({
-                        "type": "answer",
-                        "content": response,
-                        "sources": [doc.get("title", "제목 없음") for doc in relevant_docs]
-                    }))
-                except Exception as e:
-                    await manager.send_message(websocket, json.dumps({
-                        "type": "error",
-                        "content": f"응답 생성 중 오류가 발생했습니다: {str(e)}"
-                    }))
-            else:
-                await manager.send_message(websocket, json.dumps({
+                    # 구조화된 메시지를 텍스트로 변환
+                    if isinstance(content, list):
+                        text_content = ""
+                        for block in content:
+                            if block["type"] == "code":
+                                text_content += f"\n```{block.get('language', '')}\n{block['content']}\n```\n"
+                            elif block["type"] == "math":
+                                if block["display"]:
+                                    text_content += f"\n$${block['content']}$$\n"
+                                else:
+                                    text_content += f"${block['content']}$"
+                            else:
+                                text_content += block["content"] + " "
+                        content = text_content.strip()
+                    
+                    # 채팅 기록에 사용자 메시지 추가
+                    if new_token in manager.chat_histories:
+                        manager.chat_histories[new_token].append({
+                            "role": "user",
+                            "content": content
+                        })
+                    
+                    try:
+                        print(f"DeepSeek API 호출: {content}")
+                        # AI 응답 생성
+                        response = await llm.generate_response(content)
+                        print(f"DeepSeek API 응답: {response}")
+                        
+                        # 응답을 블록으로 구조화
+                        blocks = []
+                        current_block = {"type": "text", "content": ""}
+                        
+                        lines = response.split("\n")
+                        in_code_block = False
+                        code_content = []
+                        code_lang = ""
+                        
+                        for line in lines:
+                            if line.startswith("```"):
+                                if in_code_block:
+                                    # 코드 블록 종료
+                                    if current_block["content"]:
+                                        blocks.append(current_block)
+                                        current_block = {"type": "text", "content": ""}
+                                    blocks.append({
+                                        "type": "code",
+                                        "language": code_lang,
+                                        "content": "\n".join(code_content)
+                                    })
+                                    in_code_block = False
+                                    code_content = []
+                                else:
+                                    # 코드 블록 시작
+                                    if current_block["content"]:
+                                        blocks.append(current_block)
+                                        current_block = {"type": "text", "content": ""}
+                                    in_code_block = True
+                                    code_lang = line[3:].strip()
+                            elif in_code_block:
+                                code_content.append(line)
+                            else:
+                                # 수식 처리
+                                math_parts = re.split(r'(\$\$[\s\S]*?\$\$|\$[^\$\n]+\$)', line)
+                                for part in math_parts:
+                                    if part.startswith("$$"):
+                                        if current_block["content"]:
+                                            blocks.append(current_block)
+                                            current_block = {"type": "text", "content": ""}
+                                        blocks.append({
+                                            "type": "math",
+                                            "display": True,
+                                            "content": part[2:-2].strip()
+                                        })
+                                    elif part.startswith("$"):
+                                        if current_block["content"]:
+                                            blocks.append(current_block)
+                                            current_block = {"type": "text", "content": ""}
+                                        blocks.append({
+                                            "type": "math",
+                                            "display": False,
+                                            "content": part[1:-1].strip()
+                                        })
+                                    elif part:
+                                        current_block["content"] += part + " "
+                        
+                        # 마지막 블록 추가
+                        if current_block["content"]:
+                            blocks.append(current_block)
+                        
+                        # 응답 전송
+                        await websocket.send_json({
+                            "type": "message",
+                            "content": blocks,
+                            "model": model
+                        })
+                        
+                        # 채팅 기록에 AI 응답 추가
+                        if new_token in manager.chat_histories:
+                            manager.chat_histories[new_token].append({
+                                "role": "assistant",
+                                "content": blocks,
+                                "model": model
+                            })
+                            
+                    except Exception as e:
+                        print(f"API 오류: {str(e)}")
+                        await websocket.send_json({
+                            "type": "error",
+                            "content": f"오류가 발생했습니다: {str(e)}"
+                        })
+                        
+            except json.JSONDecodeError as e:
+                print(f"JSON 디코딩 오류: {str(e)}")
+                await websocket.send_json({
                     "type": "error",
-                    "content": "지원하지 않는 메시지 타입입니다."
-                }))
+                    "content": "잘못된 메시지 형식입니다."
+                })
                 
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
-    except json.JSONDecodeError:
-        await manager.send_message(websocket, json.dumps({
-            "type": "error",
-            "content": "잘못된 JSON 형식입니다."
-        }))
+        manager.disconnect(websocket, client_id)
+        
     except Exception as e:
-        await manager.send_message(websocket, json.dumps({
-            "type": "error",
-            "content": f"오류가 발생했습니다: {str(e)}"
-        }))
+        print(f"WebSocket 오류: {str(e)}")
+        manager.disconnect(websocket, client_id)
+        try:
+            await websocket.send_json({
+                "type": "error",
+                "content": "죄송합니다. 오류가 발생했습니다.",
+                "error": str(e)
+            })
+        except:
+            pass
 
 @app.post("/upload")
-async def upload_paper(file: UploadFile = File(...)):
+async def upload_file(file: UploadFile = File(...)):
     try:
-        # 파일 내용 읽기
-        content = await file.read()
+        # 파일 저장 경로 설정
+        upload_dir = BASE_DIR / "data" / "papers"
+        upload_dir.mkdir(parents=True, exist_ok=True)
         
-        # 문서 저장 및 메타데이터 생성
-        metadata = document_processor.save_document(content, file.filename)
+        # 파일 저장
+        file_extension = os.path.splitext(file.filename)[1]
+        saved_filename = f"{uuid.uuid4()}{file_extension}"
+        file_path = upload_dir / saved_filename
+        
+        with open(file_path, "wb") as buffer:
+            content = await file.read()
+            buffer.write(content)
         
         # 문서 처리
-        file_path = Path(metadata["file_path"])
-        processing_result = document_processor.process_document(file_path)
-        
-        # 메타데이터와 처리 결과 병합
-        document_data = {**metadata, **processing_result}
+        processed_data = document_processor.process_document(str(file_path))
         
         # 데이터베이스에 저장
+        document_data = {
+            "original_filename": file.filename,
+            "saved_filename": saved_filename,
+            "file_path": str(file_path),
+            "file_type": file_extension[1:],
+            "upload_date": datetime.now().isoformat(),
+            "file_size": len(content),
+            "processed_file": processed_data.get("processed_file"),
+            "text_length": processed_data.get("text_length"),
+            "processed_date": datetime.now().isoformat(),
+            "title": processed_data.get("title"),
+            "authors": processed_data.get("authors"),
+            "abstract": processed_data.get("abstract"),
+            "keywords": processed_data.get("keywords"),
+            "publication_date": processed_data.get("publication_date"),
+            "journal": processed_data.get("journal"),
+            "doi": processed_data.get("doi"),
+            "citations": processed_data.get("citations"),
+            "categories": processed_data.get("categories"),
+            "tags": processed_data.get("tags"),
+            "vector_id": processed_data.get("vector_id"),
+            "created_at": datetime.now(),
+            "updated_at": datetime.now()
+        }
+        
         doc_id = database.insert_document(document_data)
         
-        return {
-            "message": "문서가 성공적으로 업로드되었습니다.",
-            "document_id": doc_id,
-            "metadata": document_data
-        }
+        return {"message": "파일이 성공적으로 업로드되었습니다.", "doc_id": doc_id}
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

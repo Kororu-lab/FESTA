@@ -3,45 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FESTA - 논문 Q&A 시스템</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <title>FESTA - From Earth to Star Thanks to AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .chat-container {
+            height: calc(100vh - 200px);
+        }
+        .message {
+            max-width: 80%;
+        }
+        .user-message {
+            margin-left: auto;
+        }
+        .assistant-message {
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-3xl font-bold text-center mb-8">FESTA - 논문 Q&A 시스템</h1>
-            
-            <!-- 논문 업로드 섹션 -->
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <h2 class="text-xl font-semibold mb-4">논문 업로드</h2>
-                <form id="uploadForm" class="flex items-center space-x-4">
-                    <input type="file" id="paperFile" accept=".pdf" class="flex-1 p-2 border rounded">
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        업로드
-                    </button>
-                </form>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">FESTA</h1>
+            <div class="flex gap-4">
+                <button id="advancedSearchBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    고급 검색
+                </button>
+                <label class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+                    파일 업로드
+                    <input type="file" id="fileInput" class="hidden" accept=".pdf,.md,.html,.tex,.txt" multiple>
+                </label>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-4">
+            <div id="chatContainer" class="chat-container overflow-y-auto mb-4 space-y-4">
+                <!-- 메시지들이 여기에 추가됩니다 -->
             </div>
 
-            <!-- 채팅 인터페이스 -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div id="chat-messages" class="h-[500px] overflow-y-auto mb-4 space-y-4">
-                    <!-- 메시지들이 여기에 동적으로 추가됩니다 -->
-                </div>
-                
-                <div class="flex space-x-4">
-                    <input type="text" id="messageInput" 
-                           class="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           placeholder="질문을 입력하세요...">
-                    <button id="sendButton" 
-                            class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-                        전송
-                    </button>
-                </div>
+            <div class="flex gap-4">
+                <input type="text" id="messageInput" 
+                       class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="질문을 입력하세요...">
+                <button id="sendButton" 
+                        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    전송
+                </button>
             </div>
         </div>
     </div>
 
-    <script src="{{ url_for('static', path='/js/chat.js') }}"></script>
+    <script>
+        // WebSocket 연결
+        const ws = new WebSocket(`ws://${window.location.host}/ws/chat`);
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const fileInput = document.getElementById('fileInput');
+        const advancedSearchBtn = document.getElementById('advancedSearchBtn');
+
+        // 로컬 스토리지에서 대화 내역 불러오기
+        let chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+        
+        // 대화 내역 표시
+        function displayChatHistory() {
+            chatContainer.innerHTML = '';
+            chatHistory.forEach(msg => {
+                appendMessage(msg.content, msg.type);
+            });
+        }
+
+        // 메시지 추가
+        function appendMessage(content, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message p-3 rounded-lg ${
+                type === 'user' ? 'user-message bg-blue-100' : 'assistant-message bg-gray-100'
+            }`;
+            messageDiv.textContent = content;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // 메시지 전송
+        function sendMessage() {
+            const content = messageInput.value.trim();
+            if (!content) return;
+
+            // 사용자 메시지 표시 및 저장
+            appendMessage(content, 'user');
+            chatHistory.push({ content, type: 'user' });
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+
+            // WebSocket으로 메시지 전송
+            ws.send(JSON.stringify({
+                type: 'question',
+                content: content
+            }));
+
+            messageInput.value = '';
+        }
+
+        // 이벤트 리스너
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // 파일 업로드 처리
+        fileInput.addEventListener('change', async (e) => {
+            const files = e.target.files;
+            if (!files.length) return;
+
+            const formData = new FormData();
+            for (let file of files) {
+                formData.append('files', file);
+            }
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                appendMessage(`파일 업로드 완료: ${files.length}개`, 'system');
+            } catch (error) {
+                appendMessage('파일 업로드 중 오류가 발생했습니다.', 'system');
+            }
+        });
+
+        // 고급 검색 버튼 클릭 처리
+        advancedSearchBtn.addEventListener('click', () => {
+            appendMessage('고급 검색 기능은 현재 개발 중입니다.', 'system');
+        });
+
+        // WebSocket 메시지 수신 처리
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'answer') {
+                appendMessage(data.content, 'assistant');
+                chatHistory.push({ content: data.content, type: 'assistant' });
+                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+            }
+        };
+
+        // 초기 대화 내역 표시
+        displayChatHistory();
+    </script>
 </body>
 </html> 

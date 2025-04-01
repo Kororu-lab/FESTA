@@ -36,7 +36,6 @@ class Database:
                     journal TEXT,
                     doi TEXT,
                     citations TEXT,
-                    references TEXT,
                     categories TEXT,
                     tags TEXT,
                     vector_id TEXT,

@@ -1,0 +1,1487 @@
+
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>AI 뉴스 분석 리포트</title>
+            <style>
+                :root {
+                    --primary-color: #2563eb;
+                    --secondary-color: #1e40af;
+                    --text-color: #1f2937;
+                    --bg-color: #f3f4f6;
+                    --card-bg: #ffffff;
+                    --border-color: #e5e7eb;
+                }
+                
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                    line-height: 1.6;
+                    color: var(--text-color);
+                    background-color: var(--bg-color);
+                }
+                
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 2rem;
+                }
+                
+                .header {
+                    text-align: center;
+                    margin-bottom: 3rem;
+                    padding: 2rem;
+                    background: var(--card-bg);
+                    border-radius: 1rem;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                }
+                
+                .header h1 {
+                    color: var(--primary-color);
+                    font-size: 2.5rem;
+                    margin-bottom: 1rem;
+                }
+                
+                .date {
+                    color: #6b7280;
+                    font-size: 1rem;
+                }
+                
+                .section {
+                    margin-bottom: 2rem;
+                    padding: 2rem;
+                    background: var(--card-bg);
+                    border-radius: 1rem;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                }
+                
+                .section h2 {
+                    color: var(--primary-color);
+                    font-size: 1.8rem;
+                    margin-bottom: 1.5rem;
+                    padding-bottom: 0.5rem;
+                    border-bottom: 2px solid var(--border-color);
+                }
+                
+                .analysis-item {
+                    margin-bottom: 1.5rem;
+                    padding: 1.5rem;
+                    background: var(--bg-color);
+                    border-radius: 0.75rem;
+                    transition: transform 0.2s ease;
+                }
+                
+                .analysis-item:hover {
+                    transform: translateY(-2px);
+                }
+                
+                .item-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1rem;
+                }
+                
+                .item-header h3 {
+                    color: var(--text-color);
+                    font-size: 1.4rem;
+                    font-weight: 600;
+                }
+                
+                .source-link {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 0.5rem 1rem;
+                    background: var(--primary-color);
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 0.5rem;
+                    font-size: 0.9rem;
+                    transition: background-color 0.2s ease;
+                }
+                
+                .source-link:hover {
+                    background: var(--secondary-color);
+                }
+                
+                .source-icon {
+                    margin-right: 0.5rem;
+                }
+                
+                .item-content {
+                    color: #4b5563;
+                }
+                
+                .item-content p {
+                    margin: 0 0 1rem 0;
+                }
+                
+                .news-meta {
+                    display: flex;
+                    gap: 1rem;
+                    font-size: 0.9rem;
+                    color: #6b7280;
+                    margin-top: 1rem;
+                    padding-top: 1rem;
+                    border-top: 1px solid var(--border-color);
+                }
+                
+                .source, .author {
+                    font-weight: 500;
+                }
+                
+                @media (max-width: 768px) {
+                    .container {
+                        padding: 1rem;
+                    }
+                    
+                    .header h1 {
+                        font-size: 2rem;
+                    }
+                    
+                    .section {
+                        padding: 1.5rem;
+                    }
+                    
+                    .item-header {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 1rem;
+                    }
+                    
+                    .source-link {
+                        width: 100%;
+                        justify-content: center;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>AI 뉴스 분석 리포트</h1>
+                    <div class="date">생성일: 2025-04-01</div>
+                </div>
+                
+            <div class="section">
+                <h2>AI 인프라 및 에너지</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Data centers love solar: Here’s a comprehensive guide to deals over 100 megawatts</h3>
+                        <a href="https://techcrunch.com/2025/03/30/data-centers-love-solar-heres-a-comprehensive-guide-to-deals-over-100-megawatts/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>New and expanded data centers are expected to double the sector’s power demand by 2029 as tech companies rush to capitalize on AI....</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Tim De Chant</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Solar notches another win as Microsoft adds 475 MW to power its AI data centers</h3>
+                        <a href="https://techcrunch.com/2025/03/20/solar-notches-another-win-as-microsoft-adds-475-mw-to-power-its-ai-data-centers/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>The company recently signed a deal with energy provider AES for three solar projects across the Midwest....</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Tim De Chant</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Geothermal could power nearly all new data centers through 2030</h3>
+                        <a href="https://techcrunch.com/2025/03/11/geothermal-could-power-nearly-all-new-data-centers-through-2030/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Geothermal resources have enormous potential to provide the sort of consistent power that data centers crave....</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Tim De Chant</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Data center tweaks could unlock 76 GW of new power capacity in the US</h3>
+                        <a href="https://techcrunch.com/2025/02/13/data-center-tweaks-could-unlock-76-gw-of-new-power-capacity-in-the-u-s/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>A new study argues that data centers could be ideal demand-response participants because they have the potential to be flexible....</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Tim De Chant</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Meta turns to solar — again — in its data center-building boom</h3>
+                        <a href="https://techcrunch.com/2025/01/31/meta-turns-to-solar-again-in-its-data-center-building-boom/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>The announcement comes as Meta CEO Mark Zuckerberg maintains the company’s ambitious AI strategy, which will require hefty capital investments in data centers....</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Tim De Chant</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(에너지)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Nvidia thinks AI can solve electrical grid problems caused by AI</h3>
+                        <a href="https://techcrunch.com/2025/03/20/nvidia-thinks-ai-can-solve-electrical-grid-problems-caused-by-ai/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>The Open Power AI Consortium says it will use domain-specific AI models to tackle problems in the power industry....</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Tim De Chant</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 콘텐츠 생성</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>ElevenLabs now lets authors create and publish audiobooks on its own platform</h3>
+                        <a href="https://techcrunch.com/2025/02/25/elevenlabs-is-now-letting-authors-create-and-publish-audiobooks-on-its-own-platform/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Voice AI company ElevenLabs is now letting authors publish AI-generated audiobooks on its own Reader app, TechCrunch has learned and the company confirmed. The announcement comes days after the compan...</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Ivan Mehta</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>YouTube AI updates include auto dubbing expansion, age ID tech, and more</h3>
+                        <a href="https://techcrunch.com/2025/02/11/youtube-ai-updates-to-include-expansion-of-auto-dubbing-age-identifying-tech-and-more/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>In his annual letter, YouTube CEO Neal Mohan dubbed AI one of the company&#8217;s four &#8220;big bets&#8221; for 2025. The executive pointed to the company&#8217;s investments in AI tools for creator...</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Sarah Perez</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Runway Gen-4 solves AI video’s biggest problem: character consistency across scenes</h3>
+                        <a href="https://venturebeat.com/ai/runways-gen-4-ai-solves-the-character-consistency-challenge-making-ai-filmmaking-actually-useful/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Runway's new Gen-4 AI creates consistent characters across entire videos from a single reference image, challenging OpenAI's viral Ghibli trend and potentially transforming how Hollywood makes films....</p>
+                        <div class="news-meta">
+                            <span class="source">VentureBeat AI</span>
+                            <span class="author">Michael Nuñez</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(자동차)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Self Inspection raises $3M for its AI-powered vehicle inspections</h3>
+                        <a href="https://techcrunch.com/2025/02/07/self-inspection-raises-3m-for-its-ai-powered-vehicle-inspections/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>A number of startups are racing to make vehicle inspections faster, easier, and cheaper. Self Inspection, a startup based in San Diego, thinks it has them all beat with its AI-powered service &#8212; ...</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Sean O'Kane</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 사용자 설정</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>How to switch off Apple Intelligence on your iPhone, iPad, and Mac</h3>
+                        <a href="https://techcrunch.com/2025/01/27/how-to-switch-off-apple-intelligence-on-your-iphone-ipad-and-mac/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Here's a step-by-step guide on how to turn off and disable Apple Intelligence from your devices....</p>
+                        <div class="news-meta">
+                            <span class="source">TechCrunch AI</span>
+                            <span class="author">Lorenzo Franceschi-Bicchierai</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(헬스케어)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>The first trial of generative AI therapy shows it might help with depression</h3>
+                        <a href="https://www.technologyreview.com/2025/03/28/1114001/the-first-trial-of-generative-ai-therapy-shows-it-might-help-with-depression/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>The first clinical trial of a therapy bot that uses generative AI suggests it was as effective as human therapy for participants with depression, anxiety, or risk for developing eating disorders. Even...</p>
+                        <div class="news-meta">
+                            <span class="source">MIT Technology Review AI</span>
+                            <span class="author">James O'Donnell</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Brain implant translates thoughts to speech in an instant</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-01001-6" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 31 March 2025; <a href="https://www.nature.com/articles/d41586-025-01001-6">doi:10.1038/d41586-025-01001-6</a></p>Improvements to brain–computer interfaces are bringing th...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Miryam Naddaf</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>LLM-based Agent Simulation for Maternal Health Interventions: Uncertainty Estimation and Decision-focused Evaluation</h3>
+                        <a href="https://arxiv.org/abs/2503.22719" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.22719v1 Announce Type: new Abstract: Agent-based simulation is crucial for modeling complex human behavior, yet traditional approaches require extensive domain knowledge and large datasets....</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Sarah Martinson, Lingkai Kong, Cheol Woo Kim, Aparna Taneja, Milind Tambe</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 모델 해석</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Anthropic can now track the bizarre inner workings of a large language model</h3>
+                        <a href="https://www.technologyreview.com/2025/03/27/1113916/anthropic-can-now-track-the-bizarre-inner-workings-of-a-large-language-model/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>The AI firm Anthropic has developed a way to peer inside a large language model and watch what it does as it comes up with a response, revealing key new insights into how the technology works. The tak...</p>
+                        <div class="news-meta">
+                            <span class="source">MIT Technology Review AI</span>
+                            <span class="author">Will Douglas Heaven</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Identifying Multi-modal Knowledge Neurons in Pretrained Transformers via Two-stage Filtering</h3>
+                        <a href="https://arxiv.org/abs/2503.22941" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.22941v1 Announce Type: new Abstract: Recent advances in large language models (LLMs) have led to the development of multimodal LLMs (MLLMs) in the fields of natural language processing (NLP...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Yugen Sato, Tomohiro Takagi</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 모델 개발</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Google’s new experimental Gemini 2.5 model rolls out to free users</h3>
+                        <a href="https://arstechnica.com/gadgets/2025/03/googles-new-experimental-gemini-2-5-model-rolls-out-to-free-users/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Google's improved AI model is now available for free, but usage is limited....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Ryan Whitwam</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Gemini 2.5 Pro is here with bigger numbers and great vibes</h3>
+                        <a href="https://arstechnica.com/ai/2025/03/google-says-the-new-gemini-2-5-pro-model-is-its-smartest-ai-yet/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Google's new "thinking" model is ready to think for you....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Ryan Whitwam</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>With Gemini Robotics, Google Aims for Smarter Robots</h3>
+                        <a href="https://spectrum.ieee.org/gemini-robotics" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Generative AI models are getting closer to taking action in the real world. Already, the big AI companies are introducing AI agents that can take care of web-based busywork for you, ordering your groc...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Eliza Strickland</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Factored Agents: Decoupling In-Context Learning and Memorization for Robust Tool Use</h3>
+                        <a href="https://arxiv.org/abs/2503.22931" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.22931v1 Announce Type: new Abstract: In this paper, we propose a novel factored agent architecture designed to overcome the limitations of traditional single-agent systems in agentic AI. Ou...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Nicholas Roth, Christopher Hidey, Lucas Spangher, William F. Arnold, Chang Ye, Nick Masiewicki, Jinoo Baek, Peter Grabowski, Eugene Ie</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Llama 3 Meets MoE: Pioneering Low-Cost High-Performance AI</h3>
+                        <a href="https://syncedreview.com/2024/12/28/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-18/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Researchers from the University of Texas at Austin and NVIDIA proposes upcycling approach, an innovative training recipe enables the development of an 8-Expert Top-2 MoE model using Llama 3-8B with le...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>DeepMind’s JetFormer: Unified Multimodal Models Without Modelling Constraints</h3>
+                        <a href="https://syncedreview.com/2024/12/26/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-17/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>A DeepMind research team introduces JetFormer, a Transformer designed to directly model raw data. This model maximizes the likelihood of raw data without depending on any pre-trained components, and i...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>NVIDIA’s nGPT: Revolutionizing Transformers with Hypersphere Representation</h3>
+                        <a href="https://syncedreview.com/2024/12/23/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-16/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>An NVIDIA research team proposes the normalized Transformer, which consolidates key findings in Transformer research under a unified framework, offering faster learning and reduced training steps—by f...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>From Token to Conceptual: Meta introduces Large Concept Models in Multilingual AI</h3>
+                        <a href="https://syncedreview.com/2024/12/17/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-15/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>A research team at Meta introduces the Large Concept Model (LCM), a novel architecture that processes input at a higher semantic level. This shift allows the LCM to achieve remarkable zero-shot genera...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>NVIDIA’s Hybrid: Combining Attention and State Space Models for Breakthrough Performance of Small Language Models</h3>
+                        <a href="https://syncedreview.com/2024/12/14/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-14/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>An NVIDIA research team proposes Hymba, a family of small language models that blend transformer attention with state space models, which outperforms the Llama-3.2-3B model with a 1.32% higher average...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>The Future of Vision AI: How Apple’s AIMV2 Leverages Images and Text to Lead the Pack</h3>
+                        <a href="https://syncedreview.com/2024/12/07/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-11/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>An Apple research team introduces AIMV2, a family of vision encoders that is designed to predict both image patches and text tokens within a unified sequence. This combined objective enables the model...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Redefining Music AI: The Power of Sony’s SoniDo as a Versatile Foundation Model</h3>
+                        <a href="https://syncedreview.com/2024/12/05/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-10/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>In a new paper Music Foundation Model as Generic Booster for Music Downstream Tasks, a Sony research team presents SoniDo, a groundbreaking music foundation model that offers robust framework for impr...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 보안</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Gemini hackers can deliver more potent attacks with a helping hand from… Gemini</h3>
+                        <a href="https://arstechnica.com/security/2025/03/gemini-hackers-can-deliver-more-potent-attacks-with-a-helping-hand-from-gemini/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Hacking LLMs has always been more art than science. A new attack on Gemini could change that....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Dan Goodin</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>New hack uses prompt injection to corrupt Gemini’s long-term memory</h3>
+                        <a href="https://arstechnica.com/security/2025/02/new-hack-uses-prompt-injection-to-corrupt-geminis-long-term-memory/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>There's yet another way to inject malicious prompts into chatbots....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Dan Goodin</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(여행)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Google announces Maps screenshot analysis, AI itineraries to help you plan trips</h3>
+                        <a href="https://arstechnica.com/gadgets/2025/03/google-announces-maps-screenshot-analysis-ai-itineraries-to-help-you-plan-trips/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Google wants to help you get away this summer with, you guessed it, AI....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Ryan Whitwam</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 윤리</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Mom horrified by Character.AI chatbots posing as son who died by suicide</h3>
+                        <a href="https://arstechnica.com/tech-policy/2025/03/mom-horrified-by-character-ai-chatbots-posing-as-son-who-died-by-suicide/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Character.AI takes down bots bearing likeness of boy at center of lawsuit....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Ashley Belanger</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 법적 문제</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Judge disses Star Trek icon Data’s poetry while ruling AI can’t author works</h3>
+                        <a href="https://arstechnica.com/tech-policy/2025/03/judge-disses-star-trek-icon-datas-poetry-while-ruling-ai-cant-author-works/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Computer scientist won't give up fight to copyright AI-made art after court loss....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Ashley Belanger</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>AI making up cases can get lawyers fired, scandalized law firm warns</h3>
+                        <a href="https://arstechnica.com/tech-policy/2025/02/ai-making-up-cases-can-get-lawyers-fired-scandalized-law-firm-warns/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>“Nauseatingly frightening”: Law firm condemns careless AI use in court....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Ashley Belanger</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Condé Nast, other news orgs say AI firm stole articles, spit out “hallucinations”</h3>
+                        <a href="https://arstechnica.com/tech-policy/2025/02/news-orgs-accuse-ai-firm-of-stealing-articles-and-creating-fake-news/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Publishers sue Cohere, say AI firm is "stealing our works."...</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Jon Brodkin</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 투자</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Apple promises $500 billion in US investment in wake of tariff threats</h3>
+                        <a href="https://arstechnica.com/tech-policy/2025/02/apple-promises-500-billion-in-us-investment-in-wake-of-tariff-threats/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Trump tariffs risk spiking costs of both Apple's business and its products....</p>
+                        <div class="news-meta">
+                            <span class="source">Ars Technica AI</span>
+                            <span class="author">Ashley Belanger</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>$40B into the furnace: As OpenAI adds a million users an hour, the race for enterprise AI dominance hits a new gear</h3>
+                        <a href="https://venturebeat.com/ai/40b-into-the-furnace-as-openai-adds-a-million-users-an-hour-the-race-for-enterprise-ai-dominance-hits-a-new-gear/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>In a move that surprised the tech industry Monday, OpenAI said it has secured a monumental $40 billion funding round led by SoftBank, catapulting its valuation to an unprecedented $300 billion -- maki...</p>
+                        <div class="news-meta">
+                            <span class="source">VentureBeat AI</span>
+                            <span class="author">Matt Marshall</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(환경)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Deep dive: How I use robots to survey coral reefs</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00936-0" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 31 March 2025; <a href="https://www.nature.com/articles/d41586-025-00936-0">doi:10.1038/d41586-025-00936-0</a></p>Marine ecologist Gemma Galbraith builds remotely operated...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Nikki Forrester</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>(AI 관련 없음)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Big cuts to US AIDS prevention feared as NIH axes HIV research grants</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00969-5" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 31 March 2025; <a href="https://www.nature.com/articles/d41586-025-00969-5">doi:10.1038/d41586-025-00969-5</a></p>More than 200 federal grants for research related to HIV ...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Humberto Basilio</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Style over substance? What birds’ mating behaviours reveal about sexual selection</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00934-2" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 31 March 2025; <a href="https://www.nature.com/articles/d41586-025-00934-2">doi:10.1038/d41586-025-00934-2</a></p>An exploration of weird and wonderful birds across the wo...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Tim Coulson</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Audio long read: How quickly are you ageing? What molecular ‘clocks’ can tell you about your health</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00984-6" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 28 March 2025; <a href="https://www.nature.com/articles/d41586-025-00984-6">doi:10.1038/d41586-025-00984-6</a></p>Researchers are looking to improve how ageing is measured...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Benjamin Thompson</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>75% of US scientists who answered <i>Nature</i> poll consider leaving</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00938-y" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 27 March 2025; <a href="https://www.nature.com/articles/d41586-025-00938-y">doi:10.1038/d41586-025-00938-y</a></p>More than 1,600 readers answered our poll; many said they...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Alexandra Witze</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>How Trump is following Project 2025’s radical roadmap to defund science</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00780-2" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 27 March 2025; <a href="https://www.nature.com/articles/d41586-025-00780-2">doi:10.1038/d41586-025-00780-2</a></p>Much of the Trump administration’s agenda for research is...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Dan Garisto</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Showing ‘ability’ in ‘disability’ — how I mastered interviews while using a wheelchair</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00559-5" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 27 March 2025; <a href="https://www.nature.com/articles/d41586-025-00559-5">doi:10.1038/d41586-025-00559-5</a></p>Learning how to influence the way people see me when I en...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Emilia Krok</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Daily briefing: Pregnancy’s true toll on the body</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00988-2" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 27 March 2025; <a href="https://www.nature.com/articles/d41586-025-00988-2">doi:10.1038/d41586-025-00988-2</a></p>A huge study paints the most detailed picture yet of the ...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Jacob Smith</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Maingear launches MG-1 gaming systems with latest Nvidia 50 Series GPUs</h3>
+                        <a href="https://venturebeat.com/games/maingear-launches-mg-1-gaming-systems-with-latest-nvidia-50-series-gpus/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Gaming PC maker Maingear unveiled its new 2025 pre-configured MG-1 gaming systems, equipped with Nvidia's cutting-edge 50 Series GPUs....</p>
+                        <div class="news-meta">
+                            <span class="source">VentureBeat AI</span>
+                            <span class="author">Dean Takahashi</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 오픈소스</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>‘Open source’ AI isn’t truly open — here’s how researchers can reclaim the term</h3>
+                        <a href="https://www.nature.com/articles/d41586-025-00930-6" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p><p>Nature, Published online: 27 March 2025; <a href="https://www.nature.com/articles/d41586-025-00930-6">doi:10.1038/d41586-025-00930-6</a></p>Many firms are misusing the ‘open source’ label. The scie...</p>
+                        <div class="news-meta">
+                            <span class="source">Nature AI</span>
+                            <span class="author">Stefano Maffulli</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>AlexNet Source Code Is Now Open Source</h3>
+                        <a href="https://spectrum.ieee.org/alexnet-source-code" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>In partnership with Google, the Computer History Museum (CHM) has released the source code to AlexNet, the neural network that in 2012 kickstarted today’s prevailing approach to AI. The source code is...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Hansen Hsu</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>OpenAI to release open-source model as AI economics force strategic shift</h3>
+                        <a href="https://venturebeat.com/ai/openai-to-release-open-source-model-as-ai-economics-force-strategic-shift/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>OpenAI plans to release its first open-weight AI model since 2019 as economic pressures mount from competitors like DeepSeek and Meta, marking a significant strategic reversal for the company behind C...</p>
+                        <div class="news-meta">
+                            <span class="source">VentureBeat AI</span>
+                            <span class="author">Michael Nuñez</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(자율주행)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Synthetic Data Paves the Way for Self-Driving Cars</h3>
+                        <a href="https://spectrum.ieee.org/synthetic-data-self-driving" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Self-driving cars were supposed to be in our garages by now, according to the optimistic predictions of just a few years ago. But we may be nearing a few tipping points, with robotaxi adoption going u...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Eliza Strickland</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(게임)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Microsoft’s Muse AI Edits Video Games on the Fly</h3>
+                        <a href="https://spectrum.ieee.org/ai-video-games" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>So far, AI has only nipped at the edge of the games industry with tools for art, music, writing, coding, and other elements that make up video games. But what if an AI model could generate examples of...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Matthew S. Smith</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 모델 연구</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>It’s Not Just Us: AI Models Struggle With Overthinking</h3>
+                        <a href="https://spectrum.ieee.org/reasoning-in-ai" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Recent advances in large language models (LLMs) have drastically improved their ability to reason through answers to prompts. But it turns out that as their ability to reason improves, they increasing...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Matthew S. Smith</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(과학)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>The Challenges and Upsides of Using AI in Scientific Writing</h3>
+                        <a href="https://spectrum.ieee.org/challenges-upsides-ai-scientific-writing" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>This is a guest post. The views expressed here are the author’s own and do not represent positions of IEEE Spectrum, The Institute or IEEE. Scientific writing is at a pivotal stage, driven by artifici...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Wynand Lambrechts</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>AstroAgents: A Multi-Agent AI for Hypothesis Generation from Mass Spectrometry Data</h3>
+                        <a href="https://arxiv.org/abs/2503.23170" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.23170v1 Announce Type: new Abstract: With upcoming sample return missions across the solar system and the increasing availability of mass spectrometry data, there is an urgent need for meth...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Daniel Saeedi, Denise Buckner, Jose C. Aponte, Amirali Aghazadeh</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(수학)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>AI Solves Million-Step Math Problems</h3>
+                        <a href="https://spectrum.ieee.org/math-ai" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Artificial intelligence systems have made breakthrough after breakthrough mastering chess, in which games typically last about 40 moves. Now, to help solve the world’s toughest math problems, research...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Charles Q. Choi</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 교육</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>IEEE Offers AI Training Courses and a Mini MBA Program</h3>
+                        <a href="https://spectrum.ieee.org/ieee-ai-training-mini-mba" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Artificial intelligence is changing the way business is conducted. Organizations that understand where to deploy AI strategically—whether through process improvements, more effective data use, or else...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Angelique Parashis</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 에이전트</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Are You Ready to Let an AI Agent Use Your Computer?</h3>
+                        <a href="https://spectrum.ieee.org/ai-agents-computer-use" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Two years after the generative AI boom really began with the launch of ChatGPT, it no longer seems that exciting to have a phenomenally helpful AI assistant hanging around in your web browser or phone...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Eliza Strickland</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 하드웨어</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Brain-inspired Computing Is Ready for the Big Time</h3>
+                        <a href="https://spectrum.ieee.org/neuromorphic-computing-2671121824" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Efforts to build brain-inspired computer hardware have been underway for decades, but the field has yet to have its breakout moment. Now, leading researchers say the time is ripe to start building the...</p>
+                        <div class="news-meta">
+                            <span class="source">IEEE Spectrum AI</span>
+                            <span class="author">Edd Gent</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 시장 분석</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Gartner forecasts gen AI spending to hit $644B in 2025: What it means for enterprise IT leaders</h3>
+                        <a href="https://venturebeat.com/ai/gartner-forecasts-gen-ai-spending-to-hit-644b-in-2025-what-it-means-for-enterprise-it-leaders/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Gartner forecasts large growth in global AI spending as enterprises shift focus to commercial tools away from custom projects that often fail....</p>
+                        <div class="news-meta">
+                            <span class="source">VentureBeat AI</span>
+                            <span class="author">Sean Michael Kerner</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 토론</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Game industry leaders go head-to-head in GamesBeat’s Crossfire Lounge</h3>
+                        <a href="https://venturebeat.com/games/game-industry-leaders-go-head-to-head-in-gamesbeats-crossfire-lounge/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>Three head-to-head conversations, tackling the AI apocalypse, direct-to-player marketing and sales, and the state of the game industry....</p>
+                        <div class="news-meta">
+                            <span class="source">VentureBeat AI</span>
+                            <span class="author">VB Staff</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 연구</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>CodeScientist: End-to-End Semi-Automated Scientific Discovery with Code-based Experimentation</h3>
+                        <a href="https://arxiv.org/abs/2503.22708" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.22708v1 Announce Type: new Abstract: Despite the surge of interest in autonomous scientific discovery (ASD) of software artifacts (e.g., improved ML algorithms), current ASD systems face tw...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Peter Jansen, Oyvind Tafjord, Marissa Radensky, Pao Siangliulue, Tom Hope, Bhavana Dalvi Mishra, Bodhisattwa Prasad Majumder, Daniel S. Weld, Peter Clark</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>FindTheFlaws: Annotated Errors for Detecting Flawed Reasoning and Scalable Oversight Research</h3>
+                        <a href="https://arxiv.org/abs/2503.22989" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.22989v1 Announce Type: new Abstract: As AI models tackle increasingly complex problems, ensuring reliable human oversight becomes more challenging due to the difficulty of verifying solutio...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Gabriel Recchia, Chatrik Singh Mangat, Issac Li, Gayatri Krishnakumar</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Agentic Large Language Models, a survey</h3>
+                        <a href="https://arxiv.org/abs/2503.23037" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.23037v1 Announce Type: new Abstract: There is great interest in agentic LLMs, large language models that act as agents. We review the growing body of work in this area and provide a researc...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Aske Plaat, Max van Duijn, Niki van Stein, Mike Preuss, Peter van der Putten, Kees Joost Batenburg</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Automating Artificial Life Discovery: The Power of Foundation Models</h3>
+                        <a href="https://syncedreview.com/2024/12/31/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-19/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>A research team introduces Automated Search for Artificial Life (ASAL). This novel framework leverages vision-language FMs to automate and enhance the discovery process in ALife research. The post Aut...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>From Response to Query: The Power of Reverse Thinking in Language Models</h3>
+                        <a href="https://syncedreview.com/2024/12/12/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-13/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>In a new paper Time-Reversal Provides Unsupervised Feedback to LLMs, a research team from Google DeepMind and Indian Institute of Science proposes Time Reversed Language Models (TRLMs), a framework th...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(금융)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Ethereum Price Prediction Employing Large Language Models for Short-term and Few-shot Forecasting</h3>
+                        <a href="https://arxiv.org/abs/2503.23190" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.23190v1 Announce Type: new Abstract: Cryptocurrencies have transformed financial markets with their innovative blockchain technology and volatile price movements, presenting both challenges...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Eftychia Makri, Georgios Palaiokrassas, Sarah Bouraga, Antigoni Polychroniadou, Leandros Tassiulas</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(시민 참여)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>GRASP: Municipal Budget AI Chatbots for Enhancing Civic Engagement</h3>
+                        <a href="https://arxiv.org/abs/2503.23299" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.23299v1 Announce Type: new Abstract: There are a growing number of AI applications, but none tailored specifically to help residents answer their questions about municipal budget, a topic m...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Jerry Xu, Justin Wang, Joley Leung, Jasmine Gu</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(추천 시스템)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>LaViC: Adapting Large Vision-Language Models to Visually-Aware Conversational Recommendation</h3>
+                        <a href="https://arxiv.org/abs/2503.23312" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>arXiv:2503.23312v1 Announce Type: new Abstract: Conversational recommender systems engage users in dialogues to refine their needs and provide more personalized suggestions. Although textual informati...</p>
+                        <div class="news-meta">
+                            <span class="source">Arxiv AI</span>
+                            <span class="author">Hyunsik Jeon, Satoshi Koide, Yu Wang, Zhankui He, Julian McAuley</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>AI 응용(로봇)</h2>
+                
+                <div class="analysis-item">
+                    <div class="item-header">
+                        <h3>Yann LeCun Team’s New Research: Revolutionizing Visual Navigation with Navigation World Models</h3>
+                        <a href="https://syncedreview.com/2024/12/09/self-evolving-prompts-redefining-ai-alignment-with-deepmind-chicago-us-eva-framework-12/" class="source-link" target="_blank" rel="noopener noreferrer">
+                            <span class="source-icon">🔗</span> 원문 보기
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <p>In a new paper Navigation World Models, a research team from Meta, New York University and Berkeley AI Research proposes a Navigation World Model (NWM), a controllable video generation model that enab...</p>
+                        <div class="news-meta">
+                            <span class="source">Synced AI</span>
+                            <span class="author">Synced</span>
+                            <span class="date">2025-04-01</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            </div>
+        </body>
+        </html>
+        
